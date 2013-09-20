@@ -1,0 +1,19 @@
+{
+  "name" : "d3-chart", 
+  "version" : "0.0.1",
+  "description" :"A simple D3.js chart.",
+  "homepage" : "",
+  "repository" : {
+    "type" : "git", 
+    "url" : "https://github.com/jprichardson/d3-chart"
+  },
+  "keywords" : ["d3", "chart", "graph", "plot", "d3.js", "svg", "browserify", "browser", "component", "bar", "scatter", "line"],
+  "author" : "JP Richardson <jprichardson@gmail.com>",
+  "licenses" : [ {
+    "type" : "MIT",
+    "url" : ""
+  }],
+  "dependencies" : {},
+  "devDependencies":{},
+  "main" : "./d3-chart.js"
+}
