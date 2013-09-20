@@ -65,9 +65,9 @@ D3Chart.prototype.render = function() {
   this.xExtent = this.xExtent || [0, this.data.length-1]
   
   switch (this.type) {
-    case: 'scatter': renderScatter.call(ths); break;
-    case: 'bar': renderBar.call(this); break;
-    case: 'line': renderLine.call(this); break;
+    case 'scatter': renderScatter.call(ths); break;
+    case 'bar': renderBar.call(this); break;
+    case 'line': renderLine.call(this); break;
   }
 
 
@@ -96,10 +96,10 @@ function renderScatter() {
       .append("circle")
       .attr("r", 3)
       .attr("cx", function(d, i) {
-        return xScale(me.xValue.apply(me, arguments)
+        return xScale(me.xValue.apply(me, arguments))
       })
       .attr("cy", function(d, i) {
-        return yScale(me.yValue.apply(me, arguments)
+        return yScale(me.yValue.apply(me, arguments))
       })
       .attr("fill", "steelblue")
 
