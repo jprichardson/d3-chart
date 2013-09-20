@@ -69,18 +69,6 @@ D3Chart.prototype.render = function() {
     case 'bar': renderBar.call(this); break;
     case 'line': renderLine.call(this); break;
   }
-
-
-
-  var xAxis = d3.svg.axis().scale(xScale).orient('bottom')
-  if (type !== 'rect')
-    var yAxis = d3.svg.axis().scale(yScale).orient('left')
-  else {
-    var iYScale = d3.scale.linear().domain(extY).rangeRound([height-padding, padding])
-    var yAxis = d3.svg.axis().scale(iYScale).orient('left') 
-  }
-
-  renderAxes.call(this, xAxis, yAxis)
 }
 
 // Private Methods
@@ -140,7 +128,7 @@ function renderLine () {
   var me = this
 
   var xScale = d3.scale.linear().domain(this.xExtent).rangeRound([this.padding, this.width-this.padding])
-  var yScale = d3.scale.linear().domain(thix.yExtent).rangeRound([this.height-this.padding, this.padding])
+  var yScale = d3.scale.linear().domain(this.yExtent).rangeRound([this.height-this.padding, this.padding])
     
   var line = d3.svg.line()
                   .x(function(d, i) { return xScale(me.xValue.apply(me, arguments)) })
