@@ -65,7 +65,7 @@ D3Chart.prototype.render = function() {
   this.xExtent = this.xExtent || [0, this.data.length-1]
   
   switch (this.type) {
-    case 'scatter': renderScatter.call(ths); break;
+    case 'scatter': renderScatter.call(this); break;
     case 'bar': renderBar.call(this); break;
     case 'line': renderLine.call(this); break;
   }
@@ -82,6 +82,7 @@ function renderScatter() {
       .data(this.data)
       .enter()
       .append("circle")
+      .attr('class', 'd3-chart-data-circle')
       .attr("r", 3)
       .attr("cx", function(d, i) {
         return xScale(me.xValue.apply(me, arguments))
@@ -105,7 +106,7 @@ function renderBar () {
       .data(this.data)
       .enter()
       .append('rect')
-      .attr('fill', 'steelblue')
+      .attr('class', 'd3-chart-data-rect')
       .attr('x', function(d, i) {
         return xScale(me.xValue.apply(me, arguments))
       })
@@ -136,10 +137,8 @@ function renderLine () {
                   .interpolate('linear')
 
   this.svg.append('path')
+        .attr('class', 'd3-chart-data-path')
         .attr('d', line(this.data))
-        .attr('stroke', 'steelblue')
-        .attr('fill', 'white')
-        .attr('stroke-width', 3)
 
   var xAxis = d3.svg.axis().scale(xScale).orient('bottom')
   var yAxis = d3.svg.axis().scale(yScale).orient('left')
