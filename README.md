@@ -30,7 +30,7 @@ Install
 Usage
 -----
 
-### Example
+Don't use it yet, it will be usable within the next few days.
 
 
 
