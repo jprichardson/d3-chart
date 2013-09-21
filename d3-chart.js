@@ -11,14 +11,14 @@ if (typeof module != 'undefined' && typeof module.exports != 'undefined') {
   window.D3Chart = D3Chart
 }
 
-function D3Chart (d3js, svg, options) {
+function D3Chart (d3js, svg, data, options) {
   if (!(this instanceof D3Chart)) return new D3Chart(d3js, svg, options)
 
   d3 = d3js //referenced above
   this.svg = svg
 
   this.padding = options.padding || 0
-  this.data = options.data || []
+  this.data = data || []
 
   this.type = options.type || 'scatter' //'scatter', 'bar', 'line'
 
@@ -118,7 +118,7 @@ function renderBar () {
       })
 
   var xAxis = d3.svg.axis().scale(xScale).orient('bottom')
-  var iYScale = d3.scale.linear().domain(yExtent).rangeRound([this.height-this.padding, this.padding])
+  var iYScale = d3.scale.linear().domain(this.yExtent).rangeRound([this.height-this.padding, this.padding])
   var yAxis = d3.svg.axis().scale(iYScale).orient('left') 
 
   renderAxes.call(this, xAxis, yAxis)
