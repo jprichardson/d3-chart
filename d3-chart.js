@@ -29,10 +29,6 @@ function D3Chart (d3js, svg, data, options) {
   this.xExtent = options.xExtent || null
   this.yExtent = options.yExtent || null
 
-  this.onclick = __noop
-  this.onmouseover = __noop
-  this.onmouseout = __noop
-
   this._xValue = function(d, i) { return i }
   this._yValue = function(d, i) { return d }
 }
@@ -49,26 +45,19 @@ Object.defineProperty(D3Chart.prototype, 'yValue', {
   set: function(val) { this._yValue = val}
 })
 
-// Public Methods
-
-D3Chart.prototype.on = function(event, callback) {
-  switch (event) {
-    case 'click': this.onclick = callback; break;
-    case 'mouseover': this.onmouseover = callback; break;
-    case 'mouseout': this.onmouseout = callback; break;
-    default: throw new Error('event ' + event + ' not supported')
-  }
-}
-
 D3Chart.prototype.render = function() {
   this.yExtent = this.yExtent || d3.extent(this.data)
   this.xExtent = this.xExtent || [0, this.data.length-1]
   
+  var ret = null
+
   switch (this.type) {
-    case 'scatter': renderScatter.call(this); break;
-    case 'bar': renderBar.call(this); break;
-    case 'line': renderLine.call(this); break;
+    case 'scatter': ret = renderScatter.call(this); break;
+    case 'bar': ret = renderBar.call(this); break;
+    case 'line': ret = renderLine.call(this); break;
   }
+
+  return ret
 }
 
 // Private Methods
@@ -78,7 +67,7 @@ function renderScatter() {
   var xScale = d3.scale.linear().domain(this.xExtent).rangeRound([this.padding, this.width-this.padding])
   var yScale = d3.scale.linear().domain(this.yExtent).rangeRound([this.height-this.padding, this.padding])
   
-  this.svg.selectAll("circle")
+  var ret = this.svg.selectAll("circle")
       .data(this.data)
       .enter()
       .append("circle")
@@ -90,11 +79,12 @@ function renderScatter() {
       .attr("cy", function(d, i) {
         return yScale(me.yValue.apply(me, arguments))
       })
-      .attr("fill", "steelblue")
 
   var xAxis = d3.svg.axis().scale(xScale).orient('bottom')
   var yAxis = d3.svg.axis().scale(yScale).orient('left')
   renderAxes.call(this, xAxis, yAxis)
+
+  return ret
 }
 
 function renderBar () {
@@ -102,7 +92,7 @@ function renderBar () {
   var xScale = d3.scale.linear().domain(this.xExtent).rangeRound([this.padding, this.width-this.padding])
   var yScale = d3.scale.linear().domain(this.yExtent).rangeRound([this.padding, this.height-this.padding])
   
-  this.svg.selectAll('rect')
+  var ret = this.svg.selectAll('rect')
       .data(this.data)
       .enter()
       .append('rect')
@@ -123,6 +113,8 @@ function renderBar () {
   var yAxis = d3.svg.axis().scale(iYScale).orient('left') 
 
   renderAxes.call(this, xAxis, yAxis)
+
+  return ret
 }
 
 function renderLine () {
@@ -136,7 +128,7 @@ function renderLine () {
                   .y(function(d, i) { return yScale(me.yValue.apply(me, arguments)) })
                   .interpolate('linear')
 
-  this.svg.append('path')
+  var ret = this.svg.append('path')
         .attr('class', 'd3-chart-data-path')
         .attr('d', line(this.data))
 
@@ -144,6 +136,8 @@ function renderLine () {
   var yAxis = d3.svg.axis().scale(yScale).orient('left')
 
   renderAxes.call(this, xAxis, yAxis)
+
+  return ret
 }
 
 function renderAxes (xAxis, yAxis) {
