@@ -17,6 +17,8 @@ function D3Chart (d3js, svg, data, options) {
   d3 = d3js //referenced above
   this.svg = svg
 
+  this.opts = options
+
   this.padding = options.padding || 0
   this.data = data || []
 
@@ -56,6 +58,25 @@ D3Chart.prototype.render = function() {
     case 'bar': ret = renderBar.call(this); break;
     case 'line': ret = renderLine.call(this); break;
   }
+
+  var xAxisTextSize = measure(this.opts.xAxisText, 'x label')
+
+  if (this.opts.xAxisText) {
+    this.svg.append("text").attr("class", "x label")
+            .attr("text-anchor", "middle")
+            .attr("x", this.width/2 - xAxisTextSize.width /2)
+            .attr("y", this.height - 6)
+            .text(this.opts.xAxisText);
+  }
+
+  /*this.svg.append("text")
+      .attr("class", "y label")
+      .attr("text-anchor", "end")
+      .attr("y", 6)
+      .attr("x", this.height/2)
+      .attr("dy", ".75em")
+      .attr("transform", "rotate(-90)")
+      .text("y axis text");*/
 
   return ret
 }
@@ -147,6 +168,20 @@ function renderAxes (xAxis, yAxis) {
   this.svg.append('g').attr('class', 'y axis')
           .attr('transform', 'translate(' + this.padding + ',0)')
           .call(yAxis)
+}
+
+// create a dummy element, apply the appropriate classes,
+// and then measure the element
+function measure(text, classname) {
+  if(!text || text.length === 0) return {height: 0, width: 0};
+
+  var container = d3.select('body').append('svg').attr('class', classname);
+  container.append('text').attr({x: -1000, y: -1000}).text(text);
+
+  var bbox = container.node().getBBox();
+  container.remove();
+
+  return {height: bbox.height, width: bbox.width};
 }
 
 })();
